@@ -10,5 +10,6 @@
 	</head>
 
 	<body>
-		
+		<h1>Forgot your password?</h1>
+				
 	</body>
