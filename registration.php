@@ -49,9 +49,9 @@ function passwordStrength(password) {
 
 <?php
 // define variables and set to empty values
-$username = $password = $birthdayYear = $birthdayMonth = $birthdayDay = $fname = $lname = $email =  "";
+$username = $password = $birthdayYear = $birthdayMonth = $birthdayDay = $birthday = $fname = $lname = $email = $securityAnswer1 = $securityAnswer2 = "";
 //Below is the error msg to tell user that it cannot be left blank.
-$usernameErr = $passwordErr = $birthdayErr = $nameErr = $emailErr =  "";
+$usernameErr = $passwordErr = $birthdayErr = $nameErr = $emailErr = $securityA1Err = $securityA2Err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["username"])) {
@@ -64,34 +64,81 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }else{
     $password = test_input($_POST["password"]);
   }
-  if ((empty($_POST["birthdayYear"])) ||(empty($_POST["birthdayMonth"])) || (empty($_POST["birthdayDay"]))) {
-    $birthdayYear = "Birthday is required";
+  if ((empty($_POST["YYYY"])) || (empty($_POST["MM"])) || (empty($_POST["DD"]))) {
+    $birthdayErr = "Birthday is required";
   }else{
-    $birthdayYear = test_input($_POST["birthdayYear"]);
-    $birthdayMonth = test_input($_POST["birthdayMonth"]);
-    $birthdayDay = test_input($_POST["birthdayDay"]);
-  }
-  if ((empty($_POST["fname"])) || (empty($_POST["lname"]))) {
+    $birthdayYear = test_input($_POST["YYYY"]);
+    $birthdayMonth = test_input($_POST["MM"]);
+    $birthdayDay = test_input($_POST["DD"]);
+    $birthday = $_POST["YYYY"] . '-'. $_POST["MM"] . '-' . $_POST["DD"];
+  }       
+  if ((empty($_POST["firstname"])) || (empty($_POST["lastname"]))) {
     $nameErr = "Full name is required";
   } else {  
-    $fname = test_input($_POST["fname"]);
-    $lname = test_input($_POST["lname"]);
+    $fname = test_input($_POST["firstname"]);
+    $lname = test_input($_POST["lastname"]);
   }
   if (empty($_POST["email"])) {
     $emailErr = "Email is required";
-  } else {
+  } else {    
     $email = test_input($_POST["email"]);
   }
+  if (empty($_POST["securityAnswer1"])) {
+    $securityA1Err = "Answer is required";
+  }               
+  else { 
+    $securityAnswer1 = test_input($_POST["securityAnswer1"]);
+  }
+  if (empty($_POST["securityAnswer2"])) {
+    $securityA2Err = "Answer is required";
+  } else { 
+    $securityAnswer2 = test_input($_POST["securityAnswer2"]);
+  } 
   
-}
+  $securityQ1 = $_POST['securityQuestions1'];
+  $securityQ2 = $_POST['securityQuestions2'];
+
+  //Connect to database, localhost; if not, die process
+  if(!($database = mysqli_connect("localhost", "root", "COMP424", "COMP424"))) {
+    echo "Error: Unable to connect to MySQL." . PHP_EOL;
+    echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+    echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+    die ("Could not connect to database </body></html>");
+  }
+
+  //Attain the matching username that was inputted by the user (if any)
+  $result=mysqli_query($database, "SELECT username FROM user WHERE username = '" . $username . "'");
+  //Get array containing values of password and 
+  $row = mysqli_fetch_row($result);
+
+  //If there does not exist a row with the same entry for username, then 
+  if($row[0] != $username) 
+  {           
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    //Insert into user table the information for future reference
+    $sql="INSERT INTO user (username, password, firstname, lastname, birthdate, email, firstQ, firstA, secondQ, secondA) VALUES ('" . $username . "', '" . $password  . "', '" . $fname . "', '" . $lname . "', '" . $birthday . "', '" . $email . "', '" . $securityQ1 . "', '" . $securityAnswer1 . "', '" . $securityQ2 . "', '" . $securityAnswer2 . "')";
+    if (!mysqli_query($database, $sql))  //Check for errors
+      die('Error: ' . mysql_error());
+    else 
+      echo "Hello $user, your record has been added!"; 
+  }
+  else //Username exists
+  {
+    echo("<p>Username already exists. Please retry.</p>");
+  } 
+  
+} 
 
 function test_input($data) {
   $data = trim($data);
   $data = stripslashes($data);
+  $data = strip_tags($data);
   $data = htmlspecialchars($data);
   return $data;
-}
+} 
 ?>
+
 <h1>My Company User Registration<h1>
 <h2>Register</h2>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
@@ -119,25 +166,25 @@ function test_input($data) {
   <p><label for="email">E-mail:
     <input type="email" name="email" id="email">  
   </label></p>
-  <p>
+  <p><label for = "name"></label>
     <select name="securityQuestions1">
-      <option value="sq1">What is the first name of the person you first kissed?</option>
-      <option value="sq2">What is the last name of the teacher who gave you your first failing grade?</option>
-      <option value="sq3">What was the name of elementary school?</option>
+      <option value="1">What is the first name of the person you first kissed?</option>
+      <option value="2">What is the last name of the teacher who gave you your first failing grade?</option>
+      <option value="3">What was the name of elementary school?</option>
     </select>
     <p>
-    <input type="securityAnswer" name="securityAnswer1" id="securityAnswer1">
+      <input type="securityAnswer" name="securityAnswer1" id="securityAnswer1">
     </p>
-    </p>
-    <p>
+  </p>
+  <p><label for = "name"></label>
     <select name="securityQuestions2">
-      <option value="sq4">What was the name of your first pet?</option>
-      <option value="sq5">In what city/town does your yongest sibling live?</option>
+      <option value="4">What was the name of your first pet?</option>
+      <option value="5">In what city/town does your yongest sibling live?</option>
     </select>
     <p>
-    <input type="securityAnswer" name="securityAnswer2" id="securityAnswer2">
+      <input type="securityAnswer" name="securityAnswer2" id="securityAnswer2">
     </p>
-    </p>
+  </p>
 
   <p><input type="submit" value="SUBMIT"></p>
 
