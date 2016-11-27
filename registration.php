@@ -43,6 +43,27 @@ function passwordStrength(password) {
         passwordStrength(jQuery(this).val());
       });
     });
+
+      //jquery to track password input
+    jQuery(document).ready(function(){
+      jQuery("#password").focus();
+      jQuery("#password").keyup(function() {
+        passwordStrength(jQuery(this).val());
+      });
+    });
+    function checkPasswordMatch() {
+      var password = $("#password").val();
+      var confirmPassword = $("#passwordc").val();
+
+        if (password != confirmPassword)
+            $("#divCheckPasswordMatch").html("Passwords do not match!");
+        else
+            $("#divCheckPasswordMatch").html("Passwords match.");
+    }
+
+    $(document).ready(function () {
+       $("#password, #passwordc").keyup(checkPasswordMatch);
+    });
   </script>
 </head>
 <body>  
@@ -99,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $securityQ2 = $_POST['securityQuestions2'];
 
   //Connect to database, localhost; if not, die process
-  if(!($database = mysqli_connect("localhost", "root", "COMP424", "COMP424"))) {
+  if(!($database = mysqli_connect("localhost", "root", "comp424", "COMP424"))) {
     echo "Error: Unable to connect to MySQL." . PHP_EOL;
     echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
     echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
@@ -119,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Insert into user table the information for future reference
     $sql="INSERT INTO user (username, password, firstname, lastname, birthdate, email, firstQ, firstA, secondQ, secondA) VALUES ('" . $username . "', '" . $password  . "', '" . $fname . "', '" . $lname . "', '" . $birthday . "', '" . $email . "', '" . $securityQ1 . "', '" . $securityAnswer1 . "', '" . $securityQ2 . "', '" . $securityAnswer2 . "')";
     if (!mysqli_query($database, $sql))  //Check for errors
-      die('Error: ' . mysql_error());
+      die('Error: ' . mysqli_error());
     else 
       echo "Hello $user, your record has been added!"; 
   }
@@ -151,6 +172,9 @@ function test_input($data) {
     <div class="progress progress-striped active">
     <div id="jak_pstrength" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
     </div>
+    <p><labe for="password">Confirm Password:
+        <input type="password" name="passwordc" id="passwordc">
+  <div class="registrationFromAlert" id="divCheckPasswordMatch"></div>
   </label></p>
   <p><label for="fname">First Name: 
     <input type="text" name="firstname" id="fname">
