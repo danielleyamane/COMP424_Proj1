@@ -24,7 +24,7 @@ sudo systemctl restart apache2
 
 
 #MySQL
-mysql -u root -p 
+mysql -u root -p << EOF
 #Create Database
 CREATE DATABASE COMP424;
 
@@ -47,3 +47,5 @@ CREATE TABLE user (
 	secondQ int,
 	secondA varchar(255)
 );
+
+EOF
