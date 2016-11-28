@@ -7,64 +7,62 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script>
-  //js to track password credencial
-  /* Password strength indicator */
-function passwordStrength(password) {
+   <script type="text/javascript">
+   //js to track password credencial
+   /* Password strength indicator */
+    function passwordStrength(password) {
 
-  var desc = [{'width':'0px'}, {'width':'20%'}, {'width':'40%'}, {'width':'60%'}, {'width':'80%'}, {'width':'100%'}];
-  
-  var descClass = ['', 'progress-bar-danger', 'progress-bar-danger', 'progress-bar-warning', 'progress-bar-success', 'progress-bar-success'];
+      var desc = [{'width':'0px'}, {'width':'20%'}, {'width':'40%'}, {'width':'60%'}, {'width':'80%'}, {'width':'100%'}];
+      
+      var descClass = ['', 'progress-bar-danger', 'progress-bar-danger', 'progress-bar-warning', 'progress-bar-success', 'progress-bar-success'];
 
-  var score = 0;
+      var score = 0;
 
-  //if password bigger than 6 give 1 point
-  if (password.length > 6) score++;
+      //if password bigger than 6 give 1 point
+      if (password.length > 6) score++;
 
-  //if password has both lower and uppercase characters give 1 point  
-  if ((password.match(/[a-z]/)) && (password.match(/[A-Z]/))) score++;
+      //if password has both lower and uppercase characters give 1 point  
+      if ((password.match(/[a-z]/)) && (password.match(/[A-Z]/))) score++;
 
-  //if password has at least one number give 1 point
-  if (password.match(/d+/)) score++;
+      //if password has at least one number give 1 point
+      if (password.match(/d+/)) score++;
 
-  //if password has at least one special caracther give 1 point
-  if ( password.match(/.[!,@,#,$,%,^,&,*,?,_,~,-,(,)]/) ) score++;
+      //if password has at least one special caracther give 1 point
+      if ( password.match(/.[!,@,#,$,%,^,&,*,?,_,~,-,(,)]/) ) score++;
 
-  //if password bigger than 12 give another 1 point
-  if (password.length > 10) score++;
-  
-  // display indicator
-  $("#jak_pstrength").removeClass(descClass[score-1]).addClass(descClass[score]).css(desc[score]);
-}
-  //jquery to track password input
-    jQuery(document).ready(function(){
-      jQuery("#password").focus();
-      jQuery("#password").keyup(function() {
-        passwordStrength(jQuery(this).val());
-      });
-    });
-
-      //jquery to track password input
-    jQuery(document).ready(function(){
-      jQuery("#password").focus();
-      jQuery("#password").keyup(function() {
-        passwordStrength(jQuery(this).val());
-      });
-    });
-    function checkPasswordMatch() {
-      var password = $("#password").val();
-      var confirmPassword = $("#passwordc").val();
-
-        if (password != confirmPassword)
-            $("#divCheckPasswordMatch").html("Passwords do not match!");
-        else
-            $("#divCheckPasswordMatch").html("Passwords match.");
+      //if password bigger than 12 give another 1 point
+      if (password.length > 10) score++;
+      
+      // display indicator
+      $("#jak_pstrength").removeClass(descClass[score-1]).addClass(descClass[score]).css(desc[score]);
     }
 
-    $(document).ready(function () {
-       $("#password, #passwordc").keyup(checkPasswordMatch);
+
+  jQuery(document).ready(function(){
+    jQuery("#password").keyup(function() {
+      passwordStrength(jQuery(this).val());
     });
+  });
+  function checkPasswordMatch() {
+    var p1 = document.getElementById("password").value;
+    var p2 = document.getElementById("passwordc").value;
+    var confirm = true;
+      //to not display anything if password field is empty 
+      if (p1 == ""){
+      }else if (p1 != p2){
+          $("#divCheckPasswordMatch").html("Passwords do not match!");
+      }else{
+          $("#divCheckPasswordMatch").html("Passwords match.");
+      }
+  }
+
+  $(document).ready(function () {
+     $("#password, #passwordc").keyup(checkPasswordMatch);
+  });
   </script>
+  <style>
+  .error {color: #FF0000;}
+  </style>
 </head>
 <body>  
 
@@ -73,20 +71,25 @@ function passwordStrength(password) {
 $username = $password = $birthdayYear = $birthdayMonth = $birthdayDay = $birthday = $fname = $lname = $email = $securityAnswer1 = $securityAnswer2 = "";
 //Below is the error msg to tell user that it cannot be left blank.
 $usernameErr = $passwordErr = $birthdayErr = $nameErr = $emailErr = $securityA1Err = $securityA2Err = "";
-
+$errCount = 0;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["username"])) {
     $usernameErr = "Username is required";
+    $errCount++;
   } else {
     $username = test_input($_POST["username"]);
   }
   if (empty($_POST["password"])) {
     $passwordErr = "Password is required";
+        $errCount++;
+
   }else{
     $password = test_input($_POST["password"]);
   }
   if ((empty($_POST["YYYY"])) || (empty($_POST["MM"])) || (empty($_POST["DD"]))) {
     $birthdayErr = "Birthday is required";
+        $errCount++;
+
   }else{
     $birthdayYear = test_input($_POST["YYYY"]);
     $birthdayMonth = test_input($_POST["MM"]);
@@ -95,58 +98,70 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }       
   if ((empty($_POST["firstname"])) || (empty($_POST["lastname"]))) {
     $nameErr = "Full name is required";
+        $errCount++;
+
   } else {  
     $fname = test_input($_POST["firstname"]);
     $lname = test_input($_POST["lastname"]);
   }
   if (empty($_POST["email"])) {
     $emailErr = "Email is required";
+        $errCount++;
+
   } else {    
     $email = test_input($_POST["email"]);
   }
   if (empty($_POST["securityAnswer1"])) {
     $securityA1Err = "Answer is required";
+        $errCount++;
+
   }               
   else { 
     $securityAnswer1 = test_input($_POST["securityAnswer1"]);
   }
   if (empty($_POST["securityAnswer2"])) {
     $securityA2Err = "Answer is required";
+        $errCount++;
+
   } else { 
     $securityAnswer2 = test_input($_POST["securityAnswer2"]);
   } 
   
   $securityQ1 = $_POST['securityQuestions1'];
   $securityQ2 = $_POST['securityQuestions2'];
+  if($errCount > 0){
+      //don't do sql calls
+    echo "Please fill all required fields";
+  }else{
+    //Connect to database, localhost; if not, die process
+    if(!($database = mysqli_connect("localhost", "root", "comp424", "COMP424"))) {
+      echo "Error: Unable to connect to MySQL." . PHP_EOL;
+      echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+      echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+      die ("Could not connect to database </body></html>");
+    }
 
-  //Connect to database, localhost; if not, die process
-  if(!($database = mysqli_connect("localhost", "root", "comp424", "COMP424"))) {
-    echo "Error: Unable to connect to MySQL." . PHP_EOL;
-    echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
-    echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
-    die ("Could not connect to database </body></html>");
-  }
+    //Attain the matching username that was inputted by the user (if any)
+    $result=mysqli_query($database, "SELECT username FROM user WHERE username = '" . $username . "'");
+    //Get array containing values of password and 
+    $row = mysqli_fetch_row($result);
 
-  //Attain the matching username that was inputted by the user (if any)
-  $result=mysqli_query($database, "SELECT username FROM user WHERE username = '" . $username . "'");
-  //Get array containing values of password and 
-  $row = mysqli_fetch_row($result);
+    //If there does not exist a row with the same entry for username, then 
+    if($row[0] != $username) 
+    {           
+      $password = password_hash($password, PASSWORD_DEFAULT);
 
-  //If there does not exist a row with the same entry for username, then 
-  if($row[0] != $username) 
-  {           
-    $password = password_hash($password, PASSWORD_DEFAULT);
-
-    //Insert into user table the information for future reference
-    $sql="INSERT INTO user (username, password, firstname, lastname, birthdate, email, firstQ, firstA, secondQ, secondA) VALUES ('" . $username . "', '" . $password  . "', '" . $fname . "', '" . $lname . "', '" . $birthday . "', '" . $email . "', '" . $securityQ1 . "', '" . $securityAnswer1 . "', '" . $securityQ2 . "', '" . $securityAnswer2 . "')";
-    if (!mysqli_query($database, $sql))  //Check for errors
-      die('Error: ' . mysqli_error());
-    else 
-      echo "Hello $user, your record has been added!"; 
-  }
-  else //Username exists
-  {
-    echo("<p>Username already exists. Please retry.</p>");
+      //Insert into user table the information for future reference
+      $sql="INSERT INTO user (username, password, firstname, lastname, birthdate, email, firstQ, firstA, secondQ, secondA) VALUES ('" . $username . "', '" . $password  . "', '" . $fname . "', '" . $lname . "', '" . $birthday . "', '" . $email . "', '" . $securityQ1 . "', '" . $securityAnswer1 . "', '" . $securityQ2 . "', '" . $securityAnswer2 . "')";
+      if (!mysqli_query($database, $sql))  //Check for errors
+        die('Error: ' . mysqli_error());
+      else 
+        echo "Hello $user, your record has been added!"; 
+    }
+    else //Username exists
+    {
+      echo("<p>Username already exists. Please retry.</p>");
+    }
   } 
   
 } 
@@ -160,24 +175,30 @@ function test_input($data) {
 } 
 ?>
 
-<h1>My Company User Registration<h1>
+<h1>My Company User Registration</h1>
 <h2>Register</h2>
+<!-- form field -->
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
-  <input type="hidden" name="page" value="3">
   <p><label for="username">Username: 
     <input type="text" name="username" id="username">
+    <span class="error">*<?php echo $usernameErr;?></span>
   </label></p>
   <p><label for="password">Password:
     <input type="password" name="password" id="password">
+    <span class="error">*<?php echo $passwordErr;?></span>
+    <p><label for="password">Confirm Password:
+        <input type="password" name="passwordc" id="passwordc">
+        <div class="registrationFromAlert" id="divCheckPasswordMatch"></div>
+    </label></p>
+  </label></p>
+    <!--password strength bar-->
     <div class="progress progress-striped active">
     <div id="jak_pstrength" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
     </div>
-    <p><labe for="password">Confirm Password:
-        <input type="password" name="passwordc" id="passwordc">
-  <div class="registrationFromAlert" id="divCheckPasswordMatch"></div>
-  </label></p>
+        
   <p><label for="fname">First Name: 
     <input type="text" name="firstname" id="fname">
+    <span class="error">*<?php echo $nameErr;?></span>
   </label></p>
   <p><label for="lname">Last Name: 
     <input type="text" name="lastname" id="lname">
@@ -186,11 +207,13 @@ function test_input($data) {
     Year <input type="integer" size="4" maxlength="4" name="YYYY" id="birthdayYear">
     Month <input type="integer" size="2" maxlength="2" name="MM" id="birthdayMonth">
     Day <input type="integer" size="2" maxlength="2" name="DD" id="birthdayDay">
+    <span class="error">*<?php echo $birthdayErr;?></span>
   </label></p>
   <p><label for="email">E-mail:
     <input type="email" name="email" id="email">  
+    <span class="error">*<?php echo $emailErr;?></span>
   </label></p>
-  <p><label for = "name"></label>
+  <p><label for = "securityAnswer"></label>
     <select name="securityQuestions1">
       <option value="1">What is the first name of the person you first kissed?</option>
       <option value="2">What is the last name of the teacher who gave you your first failing grade?</option>
@@ -198,18 +221,23 @@ function test_input($data) {
     </select>
     <p>
       <input type="securityAnswer" name="securityAnswer1" id="securityAnswer1">
+      <span class="error">*<?php echo $securityA1Err;?></span>
     </p>
   </p>
-  <p><label for = "name"></label>
+  <p><label for = "securityAnswer"></label>
     <select name="securityQuestions2">
       <option value="4">What was the name of your first pet?</option>
       <option value="5">In what city/town does your yongest sibling live?</option>
     </select>
     <p>
       <input type="securityAnswer" name="securityAnswer2" id="securityAnswer2">
+      <span class="error">*<?php echo $securityA2Err;?></span>
     </p>
   </p>
 
   <p><input type="submit" value="SUBMIT"></p>
 
 </form>
+
+</body>
+</html>
