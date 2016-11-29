@@ -71,6 +71,7 @@
 $username = $password = $birthdayYear = $birthdayMonth = $birthdayDay = $birthday = $fname = $lname = $email = $securityAnswer1 = $securityAnswer2 = "";
 //Below is the error msg to tell user that it cannot be left blank.
 $usernameErr = $passwordErr = $birthdayErr = $nameErr = $emailErr = $securityA1Err = $securityA2Err = "";
+$response1 = $response2 = "";
 $errCount = 0;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["username"])) {
@@ -103,6 +104,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {  
     $fname = test_input($_POST["firstname"]);
     $lname = test_input($_POST["lastname"]);
+    //check
+    if(!preg_match("/^[a-zA-Z]*$/", $fname)){
+      $nameErr="Only letters and white space allowed";
+    }
+      if(!preg_match("/^[a-zA-Z]*$/", $lname)){
+      $nameErr="Only letters and white space allowed";
+    }
   }
   if (empty($_POST["email"])) {
     $emailErr = "Email is required";
@@ -110,11 +118,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   } else {    
     $email = test_input($_POST["email"]);
+    //check
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+      $emailErr="Invalid email format";
+    }
   }
   if (empty($_POST["securityAnswer1"])) {
     $securityA1Err = "Answer is required";
         $errCount++;
-
   }               
   else { 
     $securityAnswer1 = test_input($_POST["securityAnswer1"]);
@@ -134,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "Please fill all required fields";
   }else{
     //Connect to database, localhost; if not, die process
-    if(!($database = mysqli_connect("localhost", "root", "comp424", "COMP424"))) {
+    if(!($database = mysqli_connect("localhost", "root", "COMP424", "COMP424"))) {
       echo "Error: Unable to connect to MySQL." . PHP_EOL;
       echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
       echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
