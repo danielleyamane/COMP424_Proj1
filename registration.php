@@ -156,7 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       if (!mysqli_query($database, $sql))  //Check for errors
         die('Error: ' . mysqli_error());
       else 
-        echo "Hello $user, your record has been added!"; 
+        echo "Hello ".$user.", your record has been added!"; 
     }
     else //Username exists
     {

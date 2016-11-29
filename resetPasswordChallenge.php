@@ -16,7 +16,8 @@
 			//compare answers
 			if(($_POST["sel1"] == $array[1]) && ($_POST["answer1"] == $array[2]) && ($_POST["sel2"] == $array[3]) && ($_POST["answer2"] == $array[4])){
 				//correct credentials
-				echo 'Correct!';
+		    	$_SESSION['email'] = $array[0];
+		    	header("Location: resetPassword.php");
 			}else{
 				echo 'FAIL!';
 			}
