@@ -45,51 +45,11 @@
 		    		exit;
 
 		    	}else{
-		    		//alert no matching email
-		    		//exit??
+		    		 $message = "No matching email address.";
+        			echo "<script type='text/javascript'>alert('$message');</script>"; 
+		    		
 		    	}
-		    	//echo $row; 
-			  		/*
-<?php
-			if($_SERVER["REQUEST_METHOD"]=="POST"){
-				if(empty($_POST["answer1"]) || empty($_POST["answer2"])){
-					$answerErr = "Answers to the security question is required.";
-				}
-				else{
-					$result = mysqli_query($databse, "SELECT firstQ, firstA, secondQ, secondA FROM user WHERE email = '" . $email . "'");
-					$row = mysqli_fetch_row($result);
-					echo "grab test to sql finished";
-				}
 
-			}
-		?>
-
-					if($_SERVER["REQUEST_METHOD"]=="POST"){
-						if(empty($_POST["email"])){
-							$emailErr="Email is required.";
-						} else {
-							$email=test_input($_POST["email"]);
-						}
-						if(empty($_POST["answer1"])){
-							$answerErr1="We need your answer to verify that you are the legitimate owner.";
-						} else {
-							$answer1=test_input($_POST["answer1"]);
-						}
-						if(empty($_POST["answer2"])){
-							$answerErr2="We need your answer to verify that you are the legitimate owner.";
-						} else {
-							$answer2=test_input($_POST["answer2"]);
-						}
-						*/
-
-						//Variables for storing retrieved database question values
-						//$securityQ1 = $securityQ2 = "";
-
-
-						//if((mysqli_query($database, "SELECT email FROM user WHERE email = ' "  . $email . " ' ")) != $email)
-
-
-			
 			}
 		}
 			
