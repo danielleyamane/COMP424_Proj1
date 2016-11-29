@@ -27,7 +27,7 @@
 				$email=test_input($_POST["email"]);
 
 				//Connect to database, localhost; if not, die process *RECYCLING DANIELLE's CODE*
-				if(!($database=mysqli_connect("localhost", "root", "comp424", "COMP424"))){
+				if(!($database=mysqli_connect("localhost", "root", "COMP424", "COMP424"))){
 					echo "Error: Unable to connect to MySQL." . PHP_EOL;
 					echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
 					echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;

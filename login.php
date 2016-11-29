@@ -68,7 +68,7 @@
 				}
 
 				//Connect to database, localhost; if not, die process
-				if(!($database = mysqli_connect("localhost", "root", "comp424", "COMP424")))
+				if(!($database = mysqli_connect("localhost", "root", "COMP424", "COMP424")))
 					die ("Could not connect to database </body></html>");
 				
 				//Login Page
