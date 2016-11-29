@@ -22,7 +22,6 @@
 			}
 		}
 	}
-
 ?>
 
 <!DOCTYPE HTML>
