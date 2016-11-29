@@ -47,9 +47,10 @@
 		    	}else{
 		    		 $message = "No matching email address.";
         			echo "<script type='text/javascript'>alert('$message');</script>"; 
-		    		
+        			header("Location: login.php");
 		    	}
 
+			
 			}
 		}
 			

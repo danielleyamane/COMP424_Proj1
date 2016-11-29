@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/recaptcha/src/autoload.php';
 $siteKey = '6LcfFQ0UAAAAAE3D0vV5C2T4m1VusBDwENBJbATY';
-
 ?>
 <!DOCTYPE HTML>
 <html lang="en-US">
